@@ -1,5 +1,5 @@
 # Problemas de ficheros de binarios (tema 15)
-Soluciones a los problemas de la clase de problemas de ficheros de texto de la asignatura Programación 1.
+Soluciones a los problemas de la clase de problemas de ficheros binarios de la asignatura Programación 1.
  
 Los enunciados pueden consultarse [aquí](https://miguel-latre.github.io/transparencias/Problemas-10-Ficheros-binarios.pdf)
  
