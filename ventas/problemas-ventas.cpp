@@ -105,14 +105,14 @@ void eliminarErroneos(const char nombreFicheroOriginal[],
 /*
  * Pre:  0 <= numClientes y numClientes < MAX_CLIENTES
  * Post: Ha devuelto «true» si y solo si «cliente» está en las primeras
- *       «numClientes» componentes de «tablaClientes».
+ *       «numClientes» componentes de «vectorClientes».
  */
-bool esta(const int cliente, const int tablaClientes[], const int numClientes) {
+bool esta(const int cliente, const int vectorClientes[], const int numClientes) {
     // Esquema de búsqueda no exhaustiva sin garantía de éxito
     bool encontrado = false;
     int i = 0;
     while (!encontrado && i < numClientes) {
-        encontrado = (tablaClientes[i] == cliente);
+        encontrado = (vectorClientes[i] == cliente);
         i++;
     }
     // encontrado || i >= numClientes
@@ -135,21 +135,21 @@ int numClientesDistintos(const char nombreFichero[]) {
         int numClientes = 0;
 
         /*
-         * Declaración de una tabla de códigos de clientes distintos
+         * Declaración de un vector de códigos de clientes distintos
          * encontrados en el fichero. Los códigos de clientes distintos
          * encontrados en el fichero en un determinado momento estarán
-         * en las «numClientes» primeras componentes de la tabla.
+         * en las «numClientes» primeras componentes del vector.
          */
-        int tablaClientes[MAX_CLIENTES];
+        int vectorClientes[MAX_CLIENTES];
 
         // Intento de lectura de la primera venta
         Venta venta;
         f.read(reinterpret_cast<char*>(&venta), sizeof(venta));
         while (!f.eof()) {
-            // Si el cliente de la última venta leída no está en la tabla,
-            // se añade a la tabla
-            if (!esta(venta.cliente, tablaClientes, numClientes)) {
-                tablaClientes[numClientes] = venta.cliente;
+            // Si el cliente de la última venta leída no está en el vector,
+            // se añade al vector.
+            if (!esta(venta.cliente, vectorClientes, numClientes)) {
+                vectorClientes[numClientes] = venta.cliente;
                 numClientes++;
             }
             // Intento de lectura de la siguiente venta
