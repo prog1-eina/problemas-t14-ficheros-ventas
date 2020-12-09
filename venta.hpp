@@ -8,8 +8,7 @@
  * Codificación de caracteres original de este fichero: UTF-8 con BOM
 \********************************************************************************/
 
- #ifndef VENTA_H_INCLUDED
- #define VENTA_H_INCLUDED
+ #pragma once
 
 /*
  * Los registros de tipo «Venta» gestionan la información asociada a ventas como
@@ -22,5 +21,3 @@ struct Venta {
     int cantidad;            // Cantidad de producto que se ha vendido
     double precioUnitario;   // Precio unitario al que se ha vendido el producto
 };
-
-#endif // VENTA_H_INCLUDED
