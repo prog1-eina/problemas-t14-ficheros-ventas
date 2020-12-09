@@ -1,9 +1,9 @@
 ﻿/******************************************************************************\
- * Curso de Programación 1. Tema 15 (Ficheros binarios)
+ * Curso de Programación 1. Tema 14 (Ficheros de texto)
  * Autores: Javier Martínez y Miguel Ángel Latre
- * Última revisión: 17 de diciembre de 2019
+ * Última revisión: 9 de diciembre de 2020
  * Resumen: Soluciones a los problemas de Programación 1 planteados en la clase
- *          de problemas de ficheros binarios
+ *          de problemas de ficheros de texto de ventas
 \******************************************************************************/
 
 #include <iostream>
@@ -17,23 +17,40 @@ using namespace std;
 const unsigned int MAX_CLIENTES = 5000;
 
 /*
- * Pre:  Existe un fichero binario de ventas con el nombre «nombreFichero»
- *       accesible para su lectura.
+ * Pre:  El flujo «f» está asociado con un fichero de texto que cumple con la
+ *       sintaxis de los ficheros de ventas establecida en el enunciado y en
+ *       disposición de leer desde el principio de una línea.
+ * Post: Ha intentado leer la línea mencionada en la precondición y, si no se
+ *       han terminado los datos del fichero en dicho intento, ha almacenado en
+ *       los campos del parámetro «venta» el código del producto vendido leído 
+ *       del fichero, el código del cliente a quien se ha vendido, la cantidad 
+ *       de producto y el precio unitario que se ha vendido.
+ */
+void leerSiguienteVenta(istream& f, Venta& venta) {
+    f >> venta.producto >> venta.cliente >> venta.cantidad 
+      >> venta.precioUnitario;
+    f.get();        // Extrae e ignora el carácter '\n' de final de línea.
+}
+
+
+/*
+ * Pre:  Existe un fichero de ventas con el nombre «nombreFichero» accesible 
+ *       para su lectura y que cumple con la sintaxis de los ficheros de ventas
+ *       establecida en el enunciado.
  * Post: Ha devuelto la cantidad total a facturar al cliente cuyo código es 
  *       igual a «clienteFactura» por las ventas que le corresponden registradas 
  *       en el fichero de ventas de nombre «nombreFichero».
  */
-double totalFactura(const string nombreFichero, 
-                    const unsigned int clienteFactura) {
+double totalFactura(const string nombreFichero, const int clienteFactura) {
     // Creación de un objeto «ifstream» para leer el fichero
-    ifstream f(nombreFichero, ios::binary);
+    ifstream f(nombreFichero);
     if (f.is_open()) {
         // Importe inicial de la factura
         double total = 0.0;
 
         // Intento de lectura de la primera venta
         Venta venta;
-        f.read(reinterpret_cast<char*>(&venta), sizeof(venta));
+        leerSiguienteVenta(f, venta);
         while (!f.eof()) {
             // Si la última venta leída corresponde a «cliente», se añade su
             // importe al total
@@ -41,7 +58,7 @@ double totalFactura(const string nombreFichero,
                 total = total + venta.precioUnitario * venta.cantidad;
             }
             // Intento de lectura de la siguiente venta
-            f.read(reinterpret_cast<char*>(&venta), sizeof(venta));
+            leerSiguienteVenta(f, venta);
         }
         // Cierre del fichero y devolución del total calculado
         f.close();
@@ -56,35 +73,35 @@ double totalFactura(const string nombreFichero,
 
 
 /*
- * Pre:  Existe un fichero binario de ventas con el nombre
- *       «nombreFicheroOriginal» accesible para su lectura y es posible crear
- *       o reescribir el fichero de nombre «nombreFicheroFinal» para su
- *       escritura.
- * Post: Ha copiado en el fichero de nombre «nombreFicheroFinal» las
- *       ventas almacenadas en el fichero de nombre «nombreFicheroOriginal»
- *       que no son erróneas y solo esas. Una venta es considerada errónea
- *       cuando la cantidad o el precio unitario o ambos son nulos o negativos.
+ * Pre:  Existe un fichero de ventas con el nombre «nombreFicheroOriginal»
+ *       accesible para su lectura y que cumple con la sintaxis de los ficheros 
+ *       de ventas establecida en el enunciado y es posible crear o reescribir
+ *       el fichero de nombre «nombreFicheroFinal» para su escritura.
+ * Post: Ha copiado en el fichero de nombre «nombreFicheroFinal» las ventas 
+ *       almacenadas en el fichero de nombre «nombreFicheroOriginal» que no son 
+ *       erróneas y solo esas. Una venta es considerada errónea cuando la
+ *       cantidad o el precio unitario o ambos son nulos o negativos.
  */
 void eliminarErroneos(const string nombreFicheroOriginal,
                       const string nombreFicheroFinal) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream fOriginal;
-    fOriginal.open(nombreFicheroOriginal, ios::binary);
+    fOriginal.open(nombreFicheroOriginal);
     if (fOriginal.is_open()) {
         // Creación de un objeto «ofstream» para escribir el fichero final
         ofstream fFinal;
-        fFinal.open(nombreFicheroFinal, ios::binary);
+        fFinal.open(nombreFicheroFinal);
         if (fFinal.is_open()) {
             // Intento de lectura de la primera venta
             Venta venta;
-            fOriginal.read(reinterpret_cast<char*>(&venta), sizeof(venta));
+            leerSiguienteVenta(fOriginal, venta);
             while (!fOriginal.eof()) {
                 // Si la venta no es errónea, se añade al fichero final
                 if (venta.cantidad > 0 && venta.precioUnitario > 0) {
                     fFinal.write(reinterpret_cast<const char*>(&venta),
                                  sizeof(venta));
                 }
-				fOriginal.read(reinterpret_cast<char*>(&venta), sizeof(venta));
+                leerSiguienteVenta(fOriginal, venta);
             }
             // Cierre de los ficheros
             fFinal.close();
@@ -123,14 +140,15 @@ bool esta(const unsigned int cliente, const unsigned int vectorClientes[],
 
 
 /*
- * Pre:  Existe un fichero binario de ventas con el nombre
- *       «nombreFichero» accesible para su lectura.
+ * Pre:  Existe un fichero de ventas con el nombre «nombreFichero» accesible 
+ *       para su lectura y que cumple con la sintaxis de los ficheros de ventas
+ *       establecida en el enunciado.
  * Post: Ha devuelto el número de clientes diferentes cuyas ventas están
  *       registradas en el fichero de ventas de nombre «nombreFichero».
  */
 unsigned int numClientesDistintos(const string nombreFichero) {
     // Creación de un objeto «ifstream» para leer el fichero
-    ifstream f(nombreFichero, ios::binary);
+    ifstream f(nombreFichero);
     if (f.is_open()) {
         // Número de clientes distintos identificados hasta el momento
         unsigned int numClientes = 0;
@@ -145,7 +163,7 @@ unsigned int numClientesDistintos(const string nombreFichero) {
 
         // Intento de lectura de la primera venta
         Venta venta;
-        f.read(reinterpret_cast<char*>(&venta), sizeof(venta));
+        leerSiguienteVenta(f, venta);
         while (!f.eof()) {
             // Si el cliente de la última venta leída no está en el vector,
             // se añade al vector.
@@ -154,7 +172,7 @@ unsigned int numClientesDistintos(const string nombreFichero) {
                 numClientes++;
             }
             // Intento de lectura de la siguiente venta
-            f.read(reinterpret_cast<char*>(&venta), sizeof(venta));
+            leerSiguienteVenta(f, venta);
         }
         // Cierre del fichero y devolución del número de clientes
         f.close();
@@ -168,9 +186,11 @@ unsigned int numClientesDistintos(const string nombreFichero) {
 }
 
 
-/* Pre:  Existe un fichero binario de ventas de nombre «nombreFichero» accesible
- *       para su lectura y el número de ventas almacenados en el mismo es menor
- *       o igual a la dimensión del vector «ventas».
+/* 
+ * Pre:  Existe un fichero de ventas con el nombre «nombreFichero» accesible 
+ *       para su lectura y que cumple con la sintaxis de los ficheros de ventas
+ *       establecida en el enunciado y el número de ventas almacenados en el 
+ *       mismo es menor o igual a la dimensión del vector «ventas».
  * Post: Ha asignado a «nVentas» el número de ventas del fichero y ha almacenado
  *       las primeras «nVentas» componentes del vector «ventas» la información
  *       de las ventas almacenadas en el fichero.
@@ -179,16 +199,16 @@ void leerVentas(const string nombreFichero,
                 Venta ventas[], unsigned int& nVentas) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f;
-    f.open(nombreFichero, ios::binary);
+    f.open(nombreFichero);
     if (f.is_open()) {
         nVentas = 0;
 
         // Intento de lectura de la primera venta
-        f.read(reinterpret_cast<char*>(&ventas[nVentas]), sizeof(Venta));
+        leerSiguienteVenta(f, ventas[nVentas]);
         while (!f.eof()) {
             nVentas++;
             // Intento de lectura de la siguiente venta
-            f.read(reinterpret_cast<char*>(&ventas[nVentas]), sizeof(Venta));
+            leerSiguienteVenta(f, ventas[nVentas]);
         }
         // Cierre del fichero
         f.close();
@@ -202,16 +222,20 @@ void leerVentas(const string nombreFichero,
 
 /* Pre:  ---
  * Post: Ha creado un fichero de nombre «nombreFichero» en el que ha almacenado
- *       la información codificada en binario de las «n» primeras componentes
- *       del vector «ventas».
+ *       la información de las «n» primeras componentes del vector «ventas»
+ *       siguiendo la sintaxis de los ficheros de ventas establecida en el
+ *       enunciado.
  */
 void guardarVentas(const string nombreFichero, 
-                   const Venta t[], const unsigned int n) {
+                   const Venta ventas[], const unsigned int n) {
     // Creación de un objeto «ofstream» para escribir el fichero
     ofstream f;
-    f.open(nombreFichero, ios::binary);
+    f.open(nombreFichero);
     if (f.is_open()) {
-        f.write(reinterpret_cast<const char*>(t), n * sizeof(Venta));
+        for (unsigned int i = 0; i < n; i++) {
+            f << ventas[i].producto << ' ' << ventas[i].cliente << ' ' 
+              << ventas[i].cantidad << ' ' << ventas[i].precioUnitario << endl;
+        }
         f.close();
     }
     else {
@@ -222,14 +246,7 @@ void guardarVentas(const string nombreFichero,
 
 /* CÓDIGO PARA LAS PRUEBAS, QUE REALIZA LA FUNCIÓN MAIN */
 
-const string NOMBRE_FICHERO_VENTAS = "ventas.dat";
-const unsigned int NUM_VENTAS_EJEMPLO = 4;
-const Venta VENTAS_EJEMPLO[NUM_VENTAS_EJEMPLO] = {
-    {117, 120552, 120, 3.15},
-    {122, 130922, 65, 6.40},
-    {105, 120552, 100, 3.16},
-    {154, 137054, 75, 0.98}
-};
+const string NOMBRE_FICHERO_VENTAS = "ventas.txt";
 
 
 /*
@@ -239,7 +256,6 @@ const Venta VENTAS_EJEMPLO[NUM_VENTAS_EJEMPLO] = {
  * veces.
  */
 int main() {
-    guardarVentas(NOMBRE_FICHERO_VENTAS, VENTAS_EJEMPLO, NUM_VENTAS_EJEMPLO);
     cout << boolalpha;
     cout << (694.0 == totalFactura(NOMBRE_FICHERO_VENTAS, 120552)) << endl;
     cout << (416.0 == totalFactura(NOMBRE_FICHERO_VENTAS, 130922)) << endl;
