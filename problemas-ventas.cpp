@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <fstream>
-#include "venta.h"
+#include "venta.hpp"
 using namespace std;
 
 /*
