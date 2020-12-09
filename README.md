@@ -1,4 +1,6 @@
-# Problemas de ficheros de binarios (tema 15)
+# Problemas de ficheros de texto (tema 14)
+
+## Ficheros de ventas
 
 Soluciones a los problemas de la clase de problemas de ficheros binarios de la asignatura Programación 1.
 
