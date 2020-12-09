@@ -1,11 +1,10 @@
-﻿/********************************************************************************\
+﻿/******************************************************************************\
  * Curso de Programación 1. Tema 15 (Ficheros binarios)
  * Autores: Javier Martínez y Miguel Ángel Latre
  * Última revisión: 17 de diciembre de 2019
  * Resumen: Soluciones a los problemas de Programación 1 planteados en la clase
  *          de problemas de ficheros binarios
- * Codificación de caracteres original de este fichero: UTF-8 con BOM
-\********************************************************************************/
+\******************************************************************************/
 
 #include <iostream>
 #include <fstream>
@@ -20,9 +19,9 @@ const int MAX_CLIENTES = 5000;
 /*
  * Pre:  Existe un fichero binario de ventas con el nombre «nombreFichero»
  *       accesible para su lectura.
- * Post: Ha devuelto la cantidad total a facturar al cliente cuyo código es igual
- *       a «clienteFactura» por las ventas que le corresponden registradas en
- *       el fichero de ventas de nombre «nombreFichero».
+ * Post: Ha devuelto la cantidad total a facturar al cliente cuyo código es 
+ *       igual a «clienteFactura» por las ventas que le corresponden registradas 
+ *       en el fichero de ventas de nombre «nombreFichero».
  */
 double totalFactura(const char nombreFichero[], const int clienteFactura) {
     // Creación de un objeto «ifstream» para leer el fichero
@@ -168,11 +167,11 @@ int numClientesDistintos(const char nombreFichero[]) {
 
 
 /* Pre:  Existe un fichero binario de ventas de nombre «nombreFichero» accesible
- *       para su lectura y el número de ventas almacenados en el mismo es menor o
- *       igual a la dimensión del vector «ventas».
+ *       para su lectura y el número de ventas almacenados en el mismo es menor
+ *       o igual a la dimensión del vector «ventas».
  * Post: Ha asignado a «nVentas» el número de ventas del fichero y ha almacenado
- *       las primeras «nVentas» componentes del vector «ventas» la información de
- *       las ventas almacenadas en el fichero.
+ *       las primeras «nVentas» componentes del vector «ventas» la información
+ *       de las ventas almacenadas en el fichero.
  */
 void leerVentas(const char nombreFichero[], Venta ventas[], int& nVentas) {
     // Creación de un objeto «ifstream» para leer el fichero
@@ -199,9 +198,9 @@ void leerVentas(const char nombreFichero[], Venta ventas[], int& nVentas) {
 }
 
 /* Pre:  n ≥ 0
- * Post: Ha creado un fichero de nombre «nombreFichero» en el que ha almacenado la
- *       información codificada en binario de las «n» primeras componentes del
- *       vector «ventas».
+ * Post: Ha creado un fichero de nombre «nombreFichero» en el que ha almacenado
+ *       la información codificada en binario de las «n» primeras componentes
+ *       del vector «ventas».
  */
 void guardarVentas(const char nombreFichero[], const Venta t[], const int n) {
     // Creación de un objeto «ofstream» para escribir el fichero
@@ -217,3 +216,31 @@ void guardarVentas(const char nombreFichero[], const Venta t[], const int n) {
     }
 }
 
+/* CÓDIGO PARA LAS PRUEBAS, QUE REALIZA LA FUNCIÓN MAIN */
+
+const char NOMBRE_FICHERO_VENTAS[] = "ventas.dat";
+const int NUM_VENTAS_EJEMPLO = 4;
+const Venta VENTAS_EJEMPLO[NUM_VENTAS_EJEMPLO] = {
+    {117, 120552, 120, 3.15},
+    {122, 130922, 65, 6.40},
+    {105, 120552, 100, 3.16},
+    {154, 137054, 75, 0.98}
+};
+
+
+/*
+ * Programa de pruebas que crea un fichero binario de ventas (a partir de los
+ * datos del vector «VENTAS_EJEMPLO») y prueba las funciones «totalFactura» y 
+ * «numClientesDistintos». Debe escribir «true» en la pantalla un total de 5
+ * veces.
+ */
+int main() {
+    guardarVentas(NOMBRE_FICHERO_VENTAS, VENTAS_EJEMPLO, NUM_VENTAS_EJEMPLO);
+    cout << boolalpha;
+    cout << (694.0 == totalFactura(NOMBRE_FICHERO_VENTAS, 120552)) << endl;
+    cout << (416.0 == totalFactura(NOMBRE_FICHERO_VENTAS, 130922)) << endl;
+    cout << (73.5 == totalFactura(NOMBRE_FICHERO_VENTAS, 137054)) << endl;
+    cout << (0.0 == totalFactura(NOMBRE_FICHERO_VENTAS, 123456)) << endl;
+    cout << (3 == numClientesDistintos(NOMBRE_FICHERO_VENTAS)) << endl;
+    return 0;
+}
