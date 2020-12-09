@@ -23,7 +23,8 @@ const unsigned int MAX_CLIENTES = 5000;
  *       igual a «clienteFactura» por las ventas que le corresponden registradas 
  *       en el fichero de ventas de nombre «nombreFichero».
  */
-double totalFactura(const char nombreFichero[], const unsigned int clienteFactura) {
+double totalFactura(const string nombreFichero, 
+                    const unsigned int clienteFactura) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f(nombreFichero, ios::binary);
     if (f.is_open()) {
@@ -62,10 +63,10 @@ double totalFactura(const char nombreFichero[], const unsigned int clienteFactur
  * Post: Ha copiado en el fichero de nombre «nombreFicheroFinal» las
  *       ventas almacenadas en el fichero de nombre «nombreFicheroOriginal»
  *       que no son erróneas y solo esas. Una venta es considerada errónea
- *       cuando la cantidad o el precio unitario o ambos son negativos.
+ *       cuando la cantidad o el precio unitario o ambos son nulos o negativos.
  */
-void eliminarErroneos(const char nombreFicheroOriginal[],
-                      const char nombreFicheroFinal[]) {
+void eliminarErroneos(const string nombreFicheroOriginal,
+                      const string nombreFicheroFinal) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream fOriginal;
     fOriginal.open(nombreFicheroOriginal, ios::binary);
@@ -79,7 +80,7 @@ void eliminarErroneos(const char nombreFicheroOriginal[],
             fOriginal.read(reinterpret_cast<char*>(&venta), sizeof(venta));
             while (!fOriginal.eof()) {
                 // Si la venta no es errónea, se añade al fichero final
-                if (venta.cantidad >= 0 && venta.precioUnitario >= 0) {
+                if (venta.cantidad > 0 && venta.precioUnitario > 0) {
                     fFinal.write(reinterpret_cast<const char*>(&venta),
                                  sizeof(venta));
                 }
@@ -102,11 +103,12 @@ void eliminarErroneos(const char nombreFicheroOriginal[],
 
 
 /*
- * Pre:  0 <= numClientes y numClientes < MAX_CLIENTES
+ * Pre:  numClientes < MAX_CLIENTES
  * Post: Ha devuelto «true» si y solo si «cliente» está en las primeras
  *       «numClientes» componentes de «vectorClientes».
  */
-bool esta(const unsigned int cliente, const unsigned int vectorClientes[], const unsigned int numClientes) {
+bool esta(const unsigned int cliente, const unsigned int vectorClientes[], 
+          const unsigned int numClientes) {
     // Esquema de búsqueda no exhaustiva sin garantía de éxito
     bool encontrado = false;
     unsigned int i = 0;
@@ -126,7 +128,7 @@ bool esta(const unsigned int cliente, const unsigned int vectorClientes[], const
  * Post: Ha devuelto el número de clientes diferentes cuyas ventas están
  *       registradas en el fichero de ventas de nombre «nombreFichero».
  */
-unsigned int numClientesDistintos(const char nombreFichero[]) {
+unsigned int numClientesDistintos(const string nombreFichero) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f(nombreFichero, ios::binary);
     if (f.is_open()) {
@@ -173,7 +175,8 @@ unsigned int numClientesDistintos(const char nombreFichero[]) {
  *       las primeras «nVentas» componentes del vector «ventas» la información
  *       de las ventas almacenadas en el fichero.
  */
-void leerVentas(const char nombreFichero[], Venta ventas[], unsigned int& nVentas) {
+void leerVentas(const string nombreFichero, 
+                Venta ventas[], unsigned int& nVentas) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f;
     f.open(nombreFichero, ios::binary);
@@ -197,12 +200,13 @@ void leerVentas(const char nombreFichero[], Venta ventas[], unsigned int& nVenta
     }
 }
 
-/* Pre:  n ≥ 0
+/* Pre:  ---
  * Post: Ha creado un fichero de nombre «nombreFichero» en el que ha almacenado
  *       la información codificada en binario de las «n» primeras componentes
  *       del vector «ventas».
  */
-void guardarVentas(const char nombreFichero[], const Venta t[], const unsigned int n) {
+void guardarVentas(const string nombreFichero, 
+                   const Venta t[], const unsigned int n) {
     // Creación de un objeto «ofstream» para escribir el fichero
     ofstream f;
     f.open(nombreFichero, ios::binary);
@@ -218,7 +222,7 @@ void guardarVentas(const char nombreFichero[], const Venta t[], const unsigned i
 
 /* CÓDIGO PARA LAS PRUEBAS, QUE REALIZA LA FUNCIÓN MAIN */
 
-const char NOMBRE_FICHERO_VENTAS[] = "ventas.dat";
+const string NOMBRE_FICHERO_VENTAS = "ventas.dat";
 const unsigned int NUM_VENTAS_EJEMPLO = 4;
 const Venta VENTAS_EJEMPLO[NUM_VENTAS_EJEMPLO] = {
     {117, 120552, 120, 3.15},
