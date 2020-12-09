@@ -14,7 +14,7 @@ using namespace std;
 /*
  * Cantidad máxima ESTIMADA de clientes distintos en los ficheros de ventas
  */
-const int MAX_CLIENTES = 5000;
+const unsigned int MAX_CLIENTES = 5000;
 
 /*
  * Pre:  Existe un fichero binario de ventas con el nombre «nombreFichero»
@@ -23,7 +23,7 @@ const int MAX_CLIENTES = 5000;
  *       igual a «clienteFactura» por las ventas que le corresponden registradas 
  *       en el fichero de ventas de nombre «nombreFichero».
  */
-double totalFactura(const char nombreFichero[], const int clienteFactura) {
+double totalFactura(const char nombreFichero[], const unsigned int clienteFactura) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f(nombreFichero, ios::binary);
     if (f.is_open()) {
@@ -106,10 +106,10 @@ void eliminarErroneos(const char nombreFicheroOriginal[],
  * Post: Ha devuelto «true» si y solo si «cliente» está en las primeras
  *       «numClientes» componentes de «vectorClientes».
  */
-bool esta(const int cliente, const int vectorClientes[], const int numClientes) {
+bool esta(const unsigned int cliente, const unsigned int vectorClientes[], const unsigned int numClientes) {
     // Esquema de búsqueda no exhaustiva sin garantía de éxito
     bool encontrado = false;
-    int i = 0;
+    unsigned int i = 0;
     while (!encontrado && i < numClientes) {
         encontrado = (vectorClientes[i] == cliente);
         i++;
@@ -126,12 +126,12 @@ bool esta(const int cliente, const int vectorClientes[], const int numClientes) 
  * Post: Ha devuelto el número de clientes diferentes cuyas ventas están
  *       registradas en el fichero de ventas de nombre «nombreFichero».
  */
-int numClientesDistintos(const char nombreFichero[]) {
+unsigned int numClientesDistintos(const char nombreFichero[]) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f(nombreFichero, ios::binary);
     if (f.is_open()) {
         // Número de clientes distintos identificados hasta el momento
-        int numClientes = 0;
+        unsigned int numClientes = 0;
 
         /*
          * Declaración de un vector de códigos de clientes distintos
@@ -139,7 +139,7 @@ int numClientesDistintos(const char nombreFichero[]) {
          * encontrados en el fichero en un determinado momento estarán
          * en las «numClientes» primeras componentes del vector.
          */
-        int vectorClientes[MAX_CLIENTES];
+        unsigned int vectorClientes[MAX_CLIENTES];
 
         // Intento de lectura de la primera venta
         Venta venta;
@@ -173,7 +173,7 @@ int numClientesDistintos(const char nombreFichero[]) {
  *       las primeras «nVentas» componentes del vector «ventas» la información
  *       de las ventas almacenadas en el fichero.
  */
-void leerVentas(const char nombreFichero[], Venta ventas[], int& nVentas) {
+void leerVentas(const char nombreFichero[], Venta ventas[], unsigned int& nVentas) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f;
     f.open(nombreFichero, ios::binary);
@@ -202,7 +202,7 @@ void leerVentas(const char nombreFichero[], Venta ventas[], int& nVentas) {
  *       la información codificada en binario de las «n» primeras componentes
  *       del vector «ventas».
  */
-void guardarVentas(const char nombreFichero[], const Venta t[], const int n) {
+void guardarVentas(const char nombreFichero[], const Venta t[], const unsigned int n) {
     // Creación de un objeto «ofstream» para escribir el fichero
     ofstream f;
     f.open(nombreFichero, ios::binary);
@@ -219,7 +219,7 @@ void guardarVentas(const char nombreFichero[], const Venta t[], const int n) {
 /* CÓDIGO PARA LAS PRUEBAS, QUE REALIZA LA FUNCIÓN MAIN */
 
 const char NOMBRE_FICHERO_VENTAS[] = "ventas.dat";
-const int NUM_VENTAS_EJEMPLO = 4;
+const unsigned int NUM_VENTAS_EJEMPLO = 4;
 const Venta VENTAS_EJEMPLO[NUM_VENTAS_EJEMPLO] = {
     {117, 120552, 120, 3.15},
     {122, 130922, 65, 6.40},
