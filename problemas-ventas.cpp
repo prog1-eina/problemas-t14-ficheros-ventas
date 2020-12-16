@@ -250,8 +250,7 @@ const string NOMBRE_FICHERO_VENTAS = "ventas.txt";
 
 
 /*
- * Programa de pruebas que crea un fichero binario de ventas (a partir de los
- * datos del vector «VENTAS_EJEMPLO») y prueba las funciones «totalFactura» y 
+ * Programa que prueba las funciones «totalFactura» y 
  * «numClientesDistintos». Debe escribir «true» en la pantalla un total de 5
  * veces.
  */
