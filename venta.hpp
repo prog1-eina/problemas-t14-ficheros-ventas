@@ -1,7 +1,7 @@
 ﻿/******************************************************************************\
  * Curso de Programación 1. Tema 14 (Ficheros de texto)
  * Autores: Javier Martínez y Miguel Ángel Latre
- * Última revisión: 9 de diciembre de 2020
+ * Última revisión: 16 de diciembre de 2020
  * Resumen: Soluciones a los problemas de Programación 1 planteados en la clase
  *          de problemas de ficheros de texto de ventas:
  *          Fichero de especificación del módulo «venta»
@@ -11,7 +11,7 @@
 
 /*
  * Los registros de tipo «Venta» gestionan la información asociada a ventas como
- * las que se almacenan en los ficheros binarios especificados en el
+ * las que se almacenan en los ficheros de texto especificados en el
  * enunciado.
  */
 struct Venta {

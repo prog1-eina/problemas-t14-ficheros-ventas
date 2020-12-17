@@ -1,7 +1,7 @@
 ﻿/******************************************************************************\
  * Curso de Programación 1. Tema 14 (Ficheros de texto)
  * Autores: Javier Martínez y Miguel Ángel Latre
- * Última revisión: 9 de diciembre de 2020
+ * Última revisión: 16 de diciembre de 2020
  * Resumen: Soluciones a los problemas de Programación 1 planteados en la clase
  *          de problemas de ficheros de texto de ventas
 \******************************************************************************/
@@ -251,8 +251,7 @@ const string NOMBRE_FICHERO_VENTAS = "ventas.txt";
 
 
 /*
- * Programa de pruebas que crea un fichero binario de ventas (a partir de los
- * datos del vector «VENTAS_EJEMPLO») y prueba las funciones «totalFactura» y 
+ * Programa que prueba las funciones «totalFactura» y 
  * «numClientesDistintos». Debe escribir «true» en la pantalla un total de 5
  * veces.
  */
