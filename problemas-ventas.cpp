@@ -98,8 +98,9 @@ void eliminarErroneos(const string nombreFicheroOriginal,
             while (!fOriginal.eof()) {
                 // Si la venta no es errónea, se añade al fichero final
                 if (venta.cantidad > 0 && venta.precioUnitario > 0) {
-                    fFinal.write(reinterpret_cast<const char*>(&venta),
-                                 sizeof(venta));
+                    fFinal << venta.producto << ' ' << venta.cliente << ' ' 
+                           << venta.cantidad << ' ' << venta.precioUnitario
+                           << endl;
                 }
                 leerSiguienteVenta(fOriginal, venta);
             }
