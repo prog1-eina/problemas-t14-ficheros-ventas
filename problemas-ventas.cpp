@@ -4,6 +4,15 @@
  * Última revisión: 16 de diciembre de 2020
  * Resumen: Soluciones a los problemas de Programación 1 planteados en la clase
  *          de problemas de ficheros de texto de ventas
+ * Nota: El programa completo está contenido en este fichero, por lo que puede 
+ *       compilarse y ejecutarse con la extensión Code Runner de Visual Studio 
+ *       Code.
+ *       También puede compilarse desde la terminal través de la orden
+ *           g++ -Wall -Wextra problemas-ventas.cpp -o problemas-ventas
+ *       y ejecutarse en Windows a través de la orden
+ *           .\problemas-ventas.exe
+ *       o en Linux y macOS
+ *           ./problemas-ventas
 \******************************************************************************/
 
 #include <iostream>
@@ -14,7 +23,7 @@ using namespace std;
 /*
  * Cantidad máxima ESTIMADA de clientes distintos en los ficheros de ventas
  */
-const unsigned int MAX_CLIENTES = 5000;
+const unsigned MAX_CLIENTES = 5000;
 
 /*
  * Pre:  El flujo «f» está asociado con un fichero de texto que cumple con la
@@ -25,18 +34,22 @@ const unsigned int MAX_CLIENTES = 5000;
  *       los campos del parámetro «venta» el código del producto vendido leído 
  *       del fichero, el código del cliente a quien se ha vendido, la cantidad 
  *       de producto y el precio unitario que se ha vendido.
+ *       Ha devuelto «true» si los datos del fichero no se han terminado y, por
+ *       lo tanto, se han podido leer los datos mencionados. Ha devuelto «false»
+ *       en caso contrario.
  */
-void leerSiguienteVenta(istream& f, Venta& venta) {
+bool leerSiguienteVenta(istream& f, Venta& venta) {
     f >> venta.producto >> venta.cliente >> venta.cantidad 
       >> venta.precioUnitario;
-    f.get();        // Extrae e ignora el carácter '\n' de final de línea.
+    f.ignore();        // Extrae e ignora el carácter '\n' de final de línea.
+    return !f.eof();
 }
 
 
 /*
  * Pre:  Existe un fichero de ventas con el nombre «nombreFichero» accesible 
- *       para su lectura y que cumple con la sintaxis de los ficheros de ventas
- *       establecida en el enunciado.
+ *       para su lectura y que cumple con la sintaxis de la regla
+ *       <fichero-ventas> establecida en el enunciado.
  * Post: Ha devuelto la cantidad total a facturar al cliente cuyo código es 
  *       igual a «clienteFactura» por las ventas que le corresponden registradas 
  *       en el fichero de ventas de nombre «nombreFichero».
@@ -48,17 +61,13 @@ double totalFactura(const string nombreFichero, const int clienteFactura) {
         // Importe inicial de la factura
         double total = 0.0;
 
-        // Intento de lectura de la primera venta
         Venta venta;
-        leerSiguienteVenta(f, venta);
-        while (!f.eof()) {
+        while (leerSiguienteVenta(f, venta)) {
             // Si la última venta leída corresponde a «cliente», se añade su
             // importe al total
             if (venta.cliente == clienteFactura) {
                 total = total + venta.precioUnitario * venta.cantidad;
             }
-            // Intento de lectura de la siguiente venta
-            leerSiguienteVenta(f, venta);
         }
         // Cierre del fichero y devolución del total calculado
         f.close();
@@ -74,9 +83,9 @@ double totalFactura(const string nombreFichero, const int clienteFactura) {
 
 /*
  * Pre:  Existe un fichero de ventas con el nombre «nombreFicheroOriginal»
- *       accesible para su lectura y que cumple con la sintaxis de los ficheros 
- *       de ventas establecida en el enunciado y es posible crear o reescribir
- *       el fichero de nombre «nombreFicheroFinal» para su escritura.
+ *       accesible para su lectura y que cumple con la sintaxis de la regla
+ *       <fichero-ventas> establecida en el enunciado y es posible crear o
+ *       reescribir el fichero de nombre «nombreFicheroFinal» para su escritura.
  * Post: Ha copiado en el fichero de nombre «nombreFicheroFinal» las ventas 
  *       almacenadas en el fichero de nombre «nombreFicheroOriginal» que no son 
  *       erróneas y solo esas. Una venta es considerada errónea cuando la
@@ -92,17 +101,14 @@ void eliminarErroneos(const string nombreFicheroOriginal,
         ofstream fFinal;
         fFinal.open(nombreFicheroFinal);
         if (fFinal.is_open()) {
-            // Intento de lectura de la primera venta
             Venta venta;
-            leerSiguienteVenta(fOriginal, venta);
-            while (!fOriginal.eof()) {
+            while (leerSiguienteVenta(fOriginal, venta)) {
                 // Si la venta no es errónea, se añade al fichero final
                 if (venta.cantidad > 0 && venta.precioUnitario > 0) {
                     fFinal << venta.producto << ' ' << venta.cliente << ' ' 
                            << venta.cantidad << ' ' << venta.precioUnitario
                            << endl;
                 }
-                leerSiguienteVenta(fOriginal, venta);
             }
             // Cierre de los ficheros
             fFinal.close();
@@ -125,11 +131,11 @@ void eliminarErroneos(const string nombreFicheroOriginal,
  * Post: Ha devuelto «true» si y solo si «cliente» está en las primeras
  *       «numClientes» componentes de «vectorClientes».
  */
-bool esta(const unsigned int cliente, const unsigned int vectorClientes[], 
-          const unsigned int numClientes) {
+bool esta(const unsigned cliente, const unsigned vectorClientes[], 
+          const unsigned numClientes) {
     // Esquema de búsqueda no exhaustiva sin garantía de éxito
     bool encontrado = false;
-    unsigned int i = 0;
+    unsigned i = 0;
     while (!encontrado && i < numClientes) {
         encontrado = (vectorClientes[i] == cliente);
         i++;
@@ -142,17 +148,17 @@ bool esta(const unsigned int cliente, const unsigned int vectorClientes[],
 
 /*
  * Pre:  Existe un fichero de ventas con el nombre «nombreFichero» accesible 
- *       para su lectura y que cumple con la sintaxis de los ficheros de ventas
- *       establecida en el enunciado.
+ *       para su lectura y que cumple con la sintaxis de la regla
+ *       <fichero-ventas> establecida en el enunciado.
  * Post: Ha devuelto el número de clientes diferentes cuyas ventas están
  *       registradas en el fichero de ventas de nombre «nombreFichero».
  */
-unsigned int numClientesDistintos(const string nombreFichero) {
+unsigned numClientesDistintos(const string nombreFichero) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f(nombreFichero);
     if (f.is_open()) {
         // Número de clientes distintos identificados hasta el momento
-        unsigned int numClientes = 0;
+        unsigned numClientes = 0;
 
         /*
          * Declaración de un vector de códigos de clientes distintos
@@ -160,20 +166,16 @@ unsigned int numClientesDistintos(const string nombreFichero) {
          * encontrados en el fichero en un determinado momento estarán
          * en las «numClientes» primeras componentes del vector.
          */
-        unsigned int vectorClientes[MAX_CLIENTES];
+        unsigned vectorClientes[MAX_CLIENTES];
 
-        // Intento de lectura de la primera venta
         Venta venta;
-        leerSiguienteVenta(f, venta);
-        while (!f.eof()) {
+        while (leerSiguienteVenta(f, venta)) {
             // Si el cliente de la última venta leída no está en el vector,
             // se añade al vector.
             if (!esta(venta.cliente, vectorClientes, numClientes)) {
                 vectorClientes[numClientes] = venta.cliente;
                 numClientes++;
             }
-            // Intento de lectura de la siguiente venta
-            leerSiguienteVenta(f, venta);
         }
         // Cierre del fichero y devolución del número de clientes
         f.close();
@@ -189,27 +191,24 @@ unsigned int numClientesDistintos(const string nombreFichero) {
 
 /* 
  * Pre:  Existe un fichero de ventas con el nombre «nombreFichero» accesible 
- *       para su lectura y que cumple con la sintaxis de los ficheros de ventas
- *       establecida en el enunciado y el número de ventas almacenados en el 
- *       mismo es menor o igual a la dimensión del vector «ventas».
+ *       para su lectura y que cumple con la sintaxis de la regla
+ *       <fichero-ventas> establecida en el enunciado y el número de ventas
+ *       almacenados en el mismo es menor o igual a la dimensión del vector
+ *       «ventas».
  * Post: Ha asignado a «nVentas» el número de ventas del fichero y ha almacenado
  *       las primeras «nVentas» componentes del vector «ventas» la información
  *       de las ventas almacenadas en el fichero.
  */
 void leerVentas(const string nombreFichero, 
-                Venta ventas[], unsigned int& nVentas) {
+                Venta ventas[], unsigned& nVentas) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f;
     f.open(nombreFichero);
     if (f.is_open()) {
         nVentas = 0;
 
-        // Intento de lectura de la primera venta
-        leerSiguienteVenta(f, ventas[nVentas]);
-        while (!f.eof()) {
+        while (leerSiguienteVenta(f, ventas[nVentas])) {
             nVentas++;
-            // Intento de lectura de la siguiente venta
-            leerSiguienteVenta(f, ventas[nVentas]);
         }
         // Cierre del fichero
         f.close();
@@ -228,12 +227,12 @@ void leerVentas(const string nombreFichero,
  *       enunciado.
  */
 void guardarVentas(const string nombreFichero, 
-                   const Venta ventas[], const unsigned int n) {
+                   const Venta ventas[], const unsigned n) {
     // Creación de un objeto «ofstream» para escribir el fichero
     ofstream f;
     f.open(nombreFichero);
     if (f.is_open()) {
-        for (unsigned int i = 0; i < n; i++) {
+        for (unsigned i = 0; i < n; i++) {
             f << ventas[i].producto << ' ' << ventas[i].cliente << ' ' 
               << ventas[i].cantidad << ' ' << ventas[i].precioUnitario << endl;
         }
