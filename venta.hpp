@@ -15,8 +15,8 @@
  * enunciado.
  */
 struct Venta {
-    int producto;            // Código del producto vendido
-    int cliente;             // Código del cliente a quien se ha vendido
+    unsigned producto;       // Código del producto vendido
+    unsigned cliente;        // Código del cliente a quien se ha vendido
     int cantidad;            // Cantidad de producto que se ha vendido
     double precioUnitario;   // Precio unitario al que se ha vendido el producto
 };

@@ -52,9 +52,10 @@ bool leerSiguienteVenta(istream& f, Venta& venta) {
  *       <fichero-ventas> establecida en el enunciado.
  * Post: Ha devuelto la cantidad total a facturar al cliente cuyo código es 
  *       igual a «clienteFactura» por las ventas que le corresponden registradas 
- *       en el fichero de ventas de nombre «nombreFichero».
+ *       en el fichero de ventas de nombre «nombreFichero». Si el fichero
+ *		 «nombreFichero» no se puede abrir, devuelve -1.
  */
-double totalFactura(const string nombreFichero, const int clienteFactura) {
+double totalFactura(const string nombreFichero, const unsigned clienteFactura) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f(nombreFichero);
     if (f.is_open()) {
@@ -89,7 +90,7 @@ double totalFactura(const string nombreFichero, const int clienteFactura) {
  * Post: Ha copiado en el fichero de nombre «nombreFicheroFinal» las ventas 
  *       almacenadas en el fichero de nombre «nombreFicheroOriginal» que no son 
  *       erróneas y solo esas. Una venta es considerada errónea cuando la
- *       cantidad o el precio unitario o ambos son nulos o negativos.
+ *       cantidad o el precio unitario NO son positivos.
  */
 void eliminarErroneos(const string nombreFicheroOriginal,
                       const string nombreFicheroFinal) {
@@ -151,9 +152,10 @@ bool esta(const unsigned cliente, const unsigned vectorClientes[],
  *       para su lectura y que cumple con la sintaxis de la regla
  *       <fichero-ventas> establecida en el enunciado.
  * Post: Ha devuelto el número de clientes diferentes cuyas ventas están
- *       registradas en el fichero de ventas de nombre «nombreFichero».
+ *       registradas en el fichero de ventas de nombre «nombreFichero». 
+ *       Si el fichero no se puede abrir devuelve -1.
  */
-unsigned numClientesDistintos(const string nombreFichero) {
+int numClientesDistintos(const string nombreFichero) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f(nombreFichero);
     if (f.is_open()) {
@@ -195,11 +197,13 @@ unsigned numClientesDistintos(const string nombreFichero) {
  *       <fichero-ventas> establecida en el enunciado y el número de ventas
  *       almacenados en el mismo es menor o igual a la dimensión del vector
  *       «ventas».
- * Post: Ha asignado a «nVentas» el número de ventas del fichero y ha almacenado
- *       las primeras «nVentas» componentes del vector «ventas» la información
- *       de las ventas almacenadas en el fichero.
+ * Post: Si el fichero «nombreFichero» se ha podido abrir, ha asignado a
+ *       «nVentas» el número de ventas del fichero, ha almacenado las primeras
+ *       «nVentas» componentes del vector «ventas» la información de las ventas
+ *       almacenadas en el fichero y ha devuelto «true». Si no se ha podido
+ *       abrir el fichero, ha devuelto «false».
  */
-void leerVentas(const string nombreFichero, 
+bool leerVentas(const string nombreFichero, 
                 Venta ventas[], unsigned& nVentas) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f;
@@ -212,11 +216,12 @@ void leerVentas(const string nombreFichero,
         }
         // Cierre del fichero
         f.close();
+        return true;
     }
     else {
         cerr << "No se ha podido leer del fichero \"" << nombreFichero
              << "\"" << endl;
-        nVentas = -1;
+        return false;
     }
 }
 
