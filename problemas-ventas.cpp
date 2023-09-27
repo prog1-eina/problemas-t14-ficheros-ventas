@@ -73,8 +73,7 @@ double totalFactura(const string nombreFichero, const unsigned clienteFactura) {
         // Cierre del fichero y devolución del total calculado
         f.close();
         return total;
-    }
-    else {
+    } else {
         cerr << "No se ha podido leer del fichero \"" << nombreFichero
              << "\"." << endl;
         return -1;
@@ -113,14 +112,12 @@ void eliminarErroneos(const string nombreFicheroOriginal,
             }
             // Cierre de los ficheros
             fFinal.close();
-        }
-        else {
+        } else {
             cerr << "No se ha podido escribir en el fichero \""
                  << nombreFicheroFinal << "\"." << endl;
         }
         fOriginal.close();
-    }
-    else {
+    } else {
         cerr << "No se ha podido leer del fichero \"" << nombreFicheroOriginal
              << "\"." << endl;
     }
@@ -182,8 +179,7 @@ int numClientesDistintos(const string nombreFichero) {
         // Cierre del fichero y devolución del número de clientes
         f.close();
         return numClientes;
-    }
-    else {
+    } else {
         cerr << "No se ha podido leer del fichero \"" << nombreFichero
              << "\"." << endl;
         return -1;
@@ -217,8 +213,7 @@ bool leerVentas(const string nombreFichero,
         // Cierre del fichero
         f.close();
         return true;
-    }
-    else {
+    } else {
         cerr << "No se ha podido leer del fichero \"" << nombreFichero
              << "\"" << endl;
         return false;
@@ -242,8 +237,7 @@ void guardarVentas(const string nombreFichero,
               << ventas[i].cantidad << ' ' << ventas[i].precioUnitario << endl;
         }
         f.close();
-    }
-    else {
+    } else {
         cerr << "No se ha podido escribir en el fichero \"" << nombreFichero
              << "\"" << endl;
     }
