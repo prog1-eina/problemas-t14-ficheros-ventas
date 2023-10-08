@@ -4,15 +4,15 @@
  * Última revisión: 16 de diciembre de 2020
  * Resumen: Soluciones a los problemas de Programación 1 planteados en la clase
  *          de problemas de ficheros de texto de ventas
- * Nota: El programa completo está contenido en este fichero, por lo que puede 
- *       compilarse y ejecutarse con la extensión Code Runner de Visual Studio 
- *       Code.
- *       También puede compilarse desde la terminal través de la orden
- *           g++ -Wall -Wextra problemas-ventas.cpp -o problemas-ventas
- *       y ejecutarse en Windows a través de la orden
- *           .\problemas-ventas.exe
- *       o en Linux y macOS
- *           ./problemas-ventas
+ * Nota: El programa completo está contenido en este fichero, por lo que puede 
+ *       compilarse y ejecutarse con la extensión Code Runner de Visual Studio 
+ *       Code.
+ *       También puede compilarse desde la terminal través de la orden
+ *           g++ -Wall -Wextra problemas-ventas.cpp -o problemas-ventas
+ *       y ejecutarse en Windows a través de la orden
+ *           .\problemas-ventas.exe
+ *       o en Linux y macOS
+ *           ./problemas-ventas
 \******************************************************************************/
 
 #include <iostream>
