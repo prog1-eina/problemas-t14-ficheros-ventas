@@ -37,7 +37,7 @@ const unsigned MAX_CLIENTES = 5000;
  *       terminado y, por lo tanto, se han podido leer los datos mencionados.
  *       Devuelve «false» en caso contrario.
  */
-bool leerSiguienteVenta(istream& f, Venta& venta) {
+bool leerSiguienteVenta(istream &f, Venta &venta) {
     f >> venta.producto >> venta.cliente >> venta.cantidad 
       >> venta.precioUnitario;
     f.ignore();        // Extrae e ignora el carácter '\n' de final de línea.
@@ -198,7 +198,7 @@ int numClientesDistintos(const string nombreFichero) {
  *       «lecturaOk» el valor «false».
  */
 void leerVentas(const string nombreFichero, 
-                Venta ventas[], unsigned& nVentas, bool& lecturaOk) {
+                Venta ventas[], unsigned &nVentas, bool &lecturaOk) {
     // Creación de un objeto «ifstream» para leer el fichero
     ifstream f;
     f.open(nombreFichero);
@@ -228,7 +228,7 @@ void leerVentas(const string nombreFichero,
  *       «false».
  */
 void guardarVentas(const string nombreFichero, 
-                   const Venta ventas[], const unsigned n, bool& escrituraOk) {
+                   const Venta ventas[], const unsigned n, bool &escrituraOk) {
     // Creación de un objeto «ofstream» para escribir el fichero
     ofstream f;
     f.open(nombreFichero);
