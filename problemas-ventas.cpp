@@ -93,12 +93,10 @@ double totalFactura(const string nombreFichero, const unsigned clienteFactura) {
 void eliminarErroneos(const string nombreFicheroOriginal,
                       const string nombreFicheroFinal) {
     // Creación de un objeto «ifstream» para leer el fichero
-    ifstream fOriginal;
-    fOriginal.open(nombreFicheroOriginal);
+    ifstream fOriginal(nombreFicheroOriginal);
     if (fOriginal.is_open()) {
         // Creación de un objeto «ofstream» para escribir el fichero final
-        ofstream fFinal;
-        fFinal.open(nombreFicheroFinal);
+        ofstream fFinal(nombreFicheroFinal);
         if (fFinal.is_open()) {
             Venta venta;
             while (leerSiguienteVenta(fOriginal, venta)) {
@@ -200,8 +198,7 @@ int numClientesDistintos(const string nombreFichero) {
 void leerVentas(const string nombreFichero, 
                 Venta ventas[], unsigned &nVentas, bool &lecturaOk) {
     // Creación de un objeto «ifstream» para leer el fichero
-    ifstream f;
-    f.open(nombreFichero);
+    ifstream f(nombreFichero);
     if (f.is_open()) {
         nVentas = 0;
 
@@ -230,8 +227,7 @@ void leerVentas(const string nombreFichero,
 void guardarVentas(const string nombreFichero, 
                    const Venta ventas[], const unsigned n, bool &escrituraOk) {
     // Creación de un objeto «ofstream» para escribir el fichero
-    ofstream f;
-    f.open(nombreFichero);
+    ofstream f(nombreFichero);
     if (f.is_open()) {
         for (unsigned i = 0; i < n; i++) {
             f << ventas[i].producto << ' ' << ventas[i].cliente << ' ' 
