@@ -80,6 +80,20 @@ double totalFactura(const string nombreFichero, const unsigned clienteFactura) {
 
 
 /*
+ * Pre:  El flujo «f» está asociado con un fichero de texto.
+ * Post: Escribe una línea en el flujo «f» con el contenido de los campos del
+ *       parámetro «venta»: el código del producto vendido leído del fichero, el
+ *       código del cliente a quien se ha vendido, la cantidad de producto y el
+ *       precio unitario al que se ha vendido, cumpliendo con la sintaxis de la
+ *       regla <venta> establecida en el enunciado.
+ */
+void escribirVenta(ostream &f, const Venta venta) {
+    f << venta.producto << ' ' << venta.cliente << ' ' << venta.cantidad << ' '
+      << venta.precioUnitario << endl;
+}
+
+
+/*
  * Pre:  Existe un fichero de ventas con el nombre «nombreFicheroOriginal» accesible
  *       para su lectura y que cumple con la sintaxis de la regla <fichero-ventas> y
  *       es posible crear o reescribir el fichero de nombre «nombreFicheroFinal»
@@ -101,8 +115,7 @@ void eliminarErroneos(const string nombreFicheroOriginal,
             while (leerSiguienteVenta(fOriginal, venta)) {
                 // Si la venta no es errónea, se añade al fichero final
                 if (venta.cantidad > 0 && venta.precioUnitario > 0) {
-                    fFinal << venta.producto << ' ' << venta.cliente << ' ' 
-                           << venta.cantidad << ' ' << venta.precioUnitario << endl;
+                    escribirVenta(fFinal, venta);
                 }
             }
             // Cierre de los ficheros
@@ -228,8 +241,7 @@ void guardarVentas(const string nombreFichero,
     ofstream f(nombreFichero);
     if (f.is_open()) {
         for (unsigned i = 0; i < n; i++) {
-            f << ventas[i].producto << ' ' << ventas[i].cliente << ' ' 
-              << ventas[i].cantidad << ' ' << ventas[i].precioUnitario << endl;
+            escribirVenta(f, ventas[i]);
         }
         f.close();
         escrituraOk = true;
