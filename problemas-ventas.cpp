@@ -1,7 +1,6 @@
 ﻿/******************************************************************************
  * Curso de Programación 1. Tema 14 (Ficheros de texto)
  * Autores: Javier Martínez y Miguel Ángel Latre
- * Última revisión: 5 de diciembre de 2024
  * Resumen: Soluciones a los problemas de Programación 1 planteados en la clase
  *          de problemas de ficheros de texto de ventas.
  * Nota: El programa completo está contenido en este fichero, por lo que puede
